@@ -3,8 +3,10 @@ import sys
 
 # Fetches ptable data 
 def get_ptable(isIB :bool):
+    path = __file__[:-5] + 'data.csv'
+    print(path)
     columns_needed = ['Symbol', 'AtomicMass']
-    df = pd.read_csv('data.csv')[columns_needed]
+    df = pd.read_csv(path)[columns_needed]
     df['AtomicMass'] = df['AtomicMass'].astype(float)
 
     ptable = {}
@@ -12,8 +14,6 @@ def get_ptable(isIB :bool):
         ptable[row['Symbol']] = row['AtomicMass']
         if isIB:
             ptable[row['Symbol']] = round(ptable[row['Symbol']], 2)
-        else:
-            ptable[row['Symbol']] = round(ptable[row['Symbol']], 4)
 
     return ptable
 
@@ -131,7 +131,7 @@ def main(ib :bool, data, uinput=None):
     
     try:
         mass = get_mass(formula, mass_data, 0)
-        print(round(mass[0], 3) if ib else round(mass[0], 2))
+        print(round(mass[0], 2) if ib else round(mass[0], 4))
     except:
         print("Error: Bad Formula?")
         return
@@ -157,7 +157,7 @@ if __name__ == "__main__":
         print(help_msg)
         quit()
     
-    if '--ib' in args:
+    if '--ib' in args or '-ib' in args:
         ib = True
     
     # Handles inline calls
@@ -165,7 +165,7 @@ if __name__ == "__main__":
     data = get_ptable(ib)
     
     for i in args:
-        if i not in ['--ib', '-h', '--help', 'mr.py']:
+        if i not in ['--ib', '-ib', '-h', '--help', 'mr.py']:
             main(ib, data, uinput=i.strip())
             isInline = True
     
