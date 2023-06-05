@@ -150,6 +150,7 @@ Arguments:
 if __name__ == "__main__":
     ib = False
     args = sys.argv
+    args = args[1:]
     
     # Handles Args
     if '-h' in sys.argv or '--help' in args:
